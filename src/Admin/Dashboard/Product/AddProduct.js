@@ -22,7 +22,7 @@ const AddProduct = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(name, image, description, category, price);
-    if (!name || !image || !description || !category || !price) {
+    if (!name || !image || !description || !price) {
       alert("Please fill all the fields");
       return;
     }
