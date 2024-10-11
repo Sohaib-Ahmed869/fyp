@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import Layout from "./Layout";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import useStore from "./Store/store";
 
-function App() {
+const App = () => {
+  const { userRole } = useStore();
+
+  useEffect(() => {
+    if (userRole && userRole !== "null") {
+      localStorage.setItem("role", userRole);
+    } else {
+      localStorage.removeItem("role");
+    }
+
+    const handlebeforeunload = () => {
+      if (userRole && userRole !== "null") {
+        localStorage.setItem("role", userRole);
+      }
+    };
+
+    window.addEventListener("beforeunload", handlebeforeunload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handlebeforeunload);
+    };
+  }, [userRole]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Layout />
     </div>
   );
-}
+};
 
 export default App;
