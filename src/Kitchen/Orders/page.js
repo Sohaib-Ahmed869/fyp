@@ -84,7 +84,7 @@ const Orders = () => {
   return (
     <div className="p-5">
       <div>
-        <h1 className="text-2xl text-blue-500 mb-2 font-semibold">Orders</h1>
+        <h1 className="text-4xl text-primary mb-2 font-bold p-5">Active Orders ({filteredOrders.length})</h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 p-5">
         {filteredOrders.length === 0 && (
@@ -96,7 +96,7 @@ const Orders = () => {
         {filteredOrders.map((order, index) => (
           <div
             key={index}
-            className={`relative w-full rounded-lg items-center gap-5 h-96 justify-between card border-dashed border-2 border-gray-300 cursor-pointer 
+            className={`relative w-full rounded-lg gap-5 h-96 justify-between card border-dashed border-2 border-gray-300 cursor-pointer 
               ${getBackgroundColor(timeLeft[index])}`}
             onClick={() => removeOrder(index, order._id)}
           >
