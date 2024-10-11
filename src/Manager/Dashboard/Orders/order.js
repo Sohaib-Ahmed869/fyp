@@ -668,117 +668,105 @@ const Order = () => {
           </button>
         </div>
       </div>
-      {
-        //overlay modal
-        showModal && (
-          <div
-            className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50"
-            onClick={() => setShowModal(false)}
-          ></div>
-        )
-      }
-      <Modal
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        centered
-        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:outline-none rounded-2xl w-1/2 shadow-xl z-50 bg-white p-5 modal modalbody"
-      >
-        <Modal.Header closeButton className="border-b-2">
-          <Modal.Title>Order Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="p-2">
-          <div className="flex items-center justify-between mb-2 mt-2">
-            <p>
-              <strong>Order ID:</strong>{" "}
-              {selectedOrder ? commonService.handleCode(selectedOrder._id) : ""}
-            </p>
-            <p>
-              <strong>Customer Name:</strong> {selectedOrder?.customer_name}
-            </p>
+
+      {/* Order Details Modal */}
+      {showModal && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <div className="modal-header border-b-2 flex justify-between items-center">
+              <h3 className="font-bold text-lg">Order Details</h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className="btn btn-sm btn-circle btn-outline"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="modal-body p-2">
+              <div className="flex items-center justify-between mb-2">
+                <p>
+                  <strong>Order ID:</strong>{" "}
+                  {selectedOrder
+                    ? commonService.handleCode(selectedOrder._id)
+                    : ""}
+                </p>
+                <p>
+                  <strong>Customer Name:</strong> {selectedOrder?.customer_name}
+                </p>
+              </div>
+              <div className="flex items-center justify-between mb-2">
+                <p>
+                  <strong>Order Type:</strong> {selectedOrder?.order_type}
+                </p>
+                <p>
+                  <strong>Order Status:</strong> {selectedOrder?.status}
+                </p>
+              </div>
+              <div className="flex items-center justify-between mb-2">
+                <p>
+                  <strong>Payment Method:</strong>{" "}
+                  {selectedOrder?.payment_method}
+                </p>
+                <p>
+                  <strong>Address:</strong> {selectedOrder?.address}
+                </p>
+              </div>
+              <div className="flex items-center justify-between mb-2">
+                <p>
+                  <strong>Time:</strong> {selectedOrder?.time}
+                </p>
+                <p>
+                  <strong>Discount:</strong> {selectedOrder?.discount}%
+                </p>
+              </div>
+              <div className="flex items-center justify-between mb-2">
+                <p>
+                  <strong>Total:</strong> PKR {selectedOrder?.total} /-
+                </p>
+                <p>
+                  <strong>Tax:</strong> {selectedOrder?.tax}%
+                </p>
+              </div>
+              <p className="mt-2">
+                <strong>Grand Total:</strong> PKR {selectedOrder?.grand_total}{" "}
+                /-
+              </p>
+              <p className="mt-2">
+                <strong>Cart:</strong>
+              </p>
+              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    <th className="px-6 py-3">Product Name</th>
+                    <th className="px-6 py-3">Quantity</th>
+                    <th className="px-6 py-3">Price</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                  {selectedOrder?.cart.map((item) => (
+                    <tr
+                      key={item.product_name}
+                      className="text-gray-700 dark:text-gray-400"
+                    >
+                      <td className="px-6 py-4">{item.product_name}</td>
+                      <td className="px-6 py-4">{item.quantity}</td>
+                      <td className="px-6 py-4">PKR {item.price} /-</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="modal-footer border-t-2 p-2">
+              <button
+                onClick={() => setShowModal(false)}
+                className="btn btn-error w-full"
+              >
+                Close
+              </button>
+            </div>
           </div>
-          <div className="flex items-center justify-between mb-2 mt-2">
-            <p>
-              <strong>Order Type:</strong> {selectedOrder?.order_type}
-            </p>
-            <p>
-              <strong>Order Status:</strong> {selectedOrder?.status}
-            </p>
-          </div>
-          <div className="flex items-center justify-between mb-2 mt-2">
-            <p>
-              <strong>Payment Method:</strong> {selectedOrder?.payment_method}
-            </p>
-            <p>
-              <strong>Address:</strong> {selectedOrder?.address}
-            </p>
-          </div>
-          <div className="flex items-center justify-between mb-2 mt-2">
-            <p>
-              <strong>Time:</strong> {selectedOrder?.time}
-            </p>
-            <p>
-              <strong>Discount:</strong> {selectedOrder?.discount}%
-            </p>
-          </div>
-          <div className="flex items-center justify-between mb-2 mt-2">
-            <p>
-              <strong>Total:</strong> PKR {selectedOrder?.total} /-
-            </p>
-            <p>
-              <strong>Tax:</strong> {selectedOrder?.tax}%
-            </p>
-          </div>
-          <p className="mt-2 mb-2">
-            <strong>Grand Total:</strong> PKR {selectedOrder?.grand_total} /-
-          </p>
-          <p className="mt-2 mb-2">
-            <strong>Cart:</strong>
-          </p>
-          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  Product Name
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Quantity
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  Price
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-              {selectedOrder?.cart.map((item) => (
-                <tr
-                  className="text-gray-700 dark:text-gray-400"
-                  key={item.product_name}
-                >
-                  <td className="px-6 py-4">
-                    <div className="flex items-center space-x-3">
-                      <p>{item.product_name}</p>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <p>{item.quantity}</p>
-                  </td>
-                  <td className="px-6 py-4">
-                    <p>{item.price}</p>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Modal.Body>
-        <Modal.Footer className="border-t-2 p-2">
-          <button
-            onClick={() => setShowModal(false)}
-            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded w-full"
-          >
-            Close
-          </button>
-        </Modal.Footer>
-      </Modal>
+        </div>
+      )}
     </div>
   );
 };

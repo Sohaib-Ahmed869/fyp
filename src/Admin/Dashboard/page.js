@@ -75,7 +75,7 @@ const Dashboard = () => {
       <div className="flex flex-col">
         <div className="flex items-center justify-between p-5 gap-5">
           <div
-            className="relative flex w-1/4 p-5 rounded-lg shadow-md items-center gap-5 h-36 justify-between"
+            className="relative flex w-1/4 p-5 rounded-lg shadow-md gap-5 h-36 justify-between"
             style={{ background: "#2c302c" }}
           >
             <div>
@@ -88,7 +88,7 @@ const Dashboard = () => {
             </div>
           </div>
           <div
-            className="relative flex w-1/4 p-5 rounded-lg shadow-md items-center gap-5 h-36 justify-between card"
+            className="relative flex w-1/4 p-5 rounded-lg shadow-md gap-5 h-36 justify-between card"
             style={{ background: "#383F51" }}
           >
             <div>
@@ -102,7 +102,7 @@ const Dashboard = () => {
           </div>
 
           <div
-            className="relative flex w-1/4 p-5 rounded-lg shadow-md items-center gap-5 h-36 justify-between card"
+            className="relative flex w-1/4 p-5 rounded-lg shadow-md gap-5 h-36 justify-between card"
             style={{ background: "#368F8B" }}
           >
             <div>
@@ -113,7 +113,7 @@ const Dashboard = () => {
             </div>
           </div>
           <div
-            className="relative flex w-1/4 p-5 rounded-lg shadow-md items-center gap-5 h-36 justify-between card"
+            className="relative flex w-1/4 p-5 rounded-lg shadow-md gap-5 h-36 justify-between card"
             style={{ background: "#1f2937" }}
           >
             <div>

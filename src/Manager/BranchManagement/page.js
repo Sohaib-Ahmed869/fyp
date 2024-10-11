@@ -223,143 +223,128 @@ const BranchManagement = () => {
           className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-40"
         ></div>
       ) : null}
-      <Modal
-        show={openBranchModal}
-        onHide={() => setOpenBranchModal(false)}
-        centered
-        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:outline-none rounded-2xl w-1/3 shadow-xl z-50 bg-white p-5 modal modalbody pt-10 pb-10"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Open Branch</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to open the branch?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            onClick={openBranch}
-            className="bg-green-500 text-white px-4 py-2 rounded-lg"
-          >
-            Open Branch
-          </button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal
-        show={closeBranchModal}
-        onHide={() => setCloseBranchModal(false)}
-        centered
-        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:outline-none rounded-2xl w-1/3 shadow-xl z-50 bg-white p-5 modal modalbody"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Close Branch</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to close the branch?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            onClick={closeBranch}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg"
-          >
-            Close Branch
-          </button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal
-        show={openingTimeModal}
-        onHide={() => setOpeningTimeModal(false)}
-        centered
-        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:outline-none rounded-2xl w-1/3 shadow-xl z-50 bg-white p-5 modal modalbody"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="text-center font-semibold">
-            Update {branch.branch_name} Opening Time
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="p-5 flex justify-center">
-          <input
-            type="time"
-            name="opening_time"
-            value={branch.opening_time}
-            onChange={branchTimingsChanged}
-            className="border border-gray-300 rounded-lg p-2"
-          />
-        </Modal.Body>
-        <Modal.Footer className="flex justify-center w-full">
-          <button
-            onClick={updateBranchTimings}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg w-full mt-5 hover:bg-blue-600"
-          >
-            Save
-          </button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal
-        show={closingTimeModal}
-        onHide={() => setClosingTimeModal(false)}
-        centered
-        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:outline-none rounded-2xl w-1/3 shadow-xl z-50 bg-white p-5 modal modalbody"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="text-center font-semibold">
-            Update {branch.branch_name} Closing Time
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="p-5 flex justify-center">
-          <div>
-            <input
-              type="time"
-              name="closing_time"
-              value={branch.closing_time}
-              onChange={branchTimingsChanged}
-              className="border border-gray-300 rounded-lg p-2"
-            />
+      {/* Open Branch Modal */}
+      {openBranchModal && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Open Branch</h3>
+            <p className="py-4">Are you sure you want to open the branch?</p>
+            <div className="modal-action">
+              <button onClick={openBranch} className="btn btn-success">
+                Open Branch
+              </button>
+              <button onClick={() => setOpenBranchModal(false)} className="btn">
+                Cancel
+              </button>
+            </div>
           </div>
-        </Modal.Body>
-        <Modal.Footer className="flex justify-center w-full">
-          <button
-            onClick={updateBranchTimings}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg w-full mt-5 hover:bg-blue-600"
-          >
-            Save
-          </button>
-        </Modal.Footer>
-      </Modal>
+        </div>
+      )}
 
-      <Modal
-        show={cashInDrawerModal}
-        onHide={() => setCashInDrawerModal(false)}
-        centered
-        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:outline-none rounded-2xl w-1/3 shadow-xl z-50 bg-white p-5 modal modalbody"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="text-center font-semibold">
-            Update Cash in Drawer
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="p-5 flex justify-center">
-          <div>
-            <input
-              type="number"
-              name="cash_in_drawer"
-              value={cashInDrawer}
-              onChange={(e) => setCashInDrawer(e.target.value)}
-              className="border border-gray-300 rounded-lg p-2"
-            />
+      {/* Close Branch Modal */}
+      {closeBranchModal && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Close Branch</h3>
+            <p className="py-4">Are you sure you want to close the branch?</p>
+            <div className="modal-action">
+              <button onClick={closeBranch} className="btn btn-error">
+                Close Branch
+              </button>
+              <button
+                onClick={() => setCloseBranchModal(false)}
+                className="btn"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
-        </Modal.Body>
-        <Modal.Footer className="flex justify-center w-full">
-          <button
-            onClick={() => setCashInDrawerModal(false)}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg w-full mt-5 hover:bg-blue-600"
-          >
-            Save
-          </button>
-        </Modal.Footer>
-      </Modal>
+        </div>
+      )}
+
+      {/* Opening Time Modal */}
+      {openingTimeModal && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-center">
+              Update {branch.branch_name} Opening Time
+            </h3>
+            <div className="py-4">
+              <input
+                type="time"
+                name="opening_time"
+                value={branch.opening_time}
+                onChange={branchTimingsChanged}
+                className="input input-bordered w-full"
+              />
+            </div>
+            <div className="modal-action">
+              <button
+                onClick={updateBranchTimings}
+                className="btn btn-primary w-full"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Closing Time Modal */}
+      {closingTimeModal && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-center">
+              Update {branch.branch_name} Closing Time
+            </h3>
+            <div className="py-4">
+              <input
+                type="time"
+                name="closing_time"
+                value={branch.closing_time}
+                onChange={branchTimingsChanged}
+                className="input input-bordered w-full"
+              />
+            </div>
+            <div className="modal-action">
+              <button
+                onClick={updateBranchTimings}
+                className="btn btn-primary w-full"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cash in Drawer Modal */}
+      {cashInDrawerModal && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg text-center">
+              Update Cash in Drawer
+            </h3>
+            <div className="py-4">
+              <input
+                type="number"
+                name="cash_in_drawer"
+                value={cashInDrawer}
+                onChange={(e) => setCashInDrawer(e.target.value)}
+                className="input input-bordered w-full"
+              />
+            </div>
+            <div className="modal-action">
+              <button
+                onClick={() => setCashInDrawerModal(false)}
+                className="btn btn-primary w-full"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
