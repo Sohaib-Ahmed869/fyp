@@ -11,7 +11,7 @@ import ManagerDashboardLayout from "./Manager/DashboardLayout";
 import Orders from "./Kitchen/Orders/page";
 import CashierLogin from "./Cashier/Login/page";
 import ManagerLogin from "./Manager/Login/page";
-import Login from "./Login";
+import Login from "./Login/login";
 
 const Layout = () => {
   return (
