@@ -12,6 +12,7 @@ import Orders from "./Kitchen/Orders/page";
 import CashierLogin from "./Cashier/Login/page";
 import ManagerLogin from "./Manager/Login/page";
 import Login from "./Login/login";
+import AllInOneLogin from "./AllInOne";
 
 const Layout = () => {
   return (
@@ -27,6 +28,7 @@ const Layout = () => {
       <Route path="/kitchen/orders" element={<Orders />} />
       <Route path="/cashier/login" element={<CashierLogin />} />
       <Route path="/manager/login" element={<ManagerLogin />} />
+      <Route path="/allinone" element={<AllInOneLogin />} />
     </Routes>
   );
 };

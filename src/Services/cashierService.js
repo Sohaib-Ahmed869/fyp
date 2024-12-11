@@ -72,11 +72,11 @@ const cashierService = {
     }
   },
 
-  markOrderCompleted: async (orderId) => {
+  markOrderCompleted: async (orderId,feedback) => {
     try {
       const response = await axios.put(
         `${BASE_URL}/cashier/order/${orderId}/complete`,
-        {},
+        {feedback},
         {
           withCredentials: true,
         }

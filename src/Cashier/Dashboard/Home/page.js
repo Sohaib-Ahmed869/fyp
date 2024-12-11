@@ -36,6 +36,7 @@ const Home = () => {
   const [orderToComplete, setOrderToComplete] = useState("");
   const [cardTax, setCardTax] = useState(0);
   const [cashTax, setCashTax] = useState(0);
+  const [feedback, setFeedback] = useState("");
 
   const [showBranchIsClosed, setShowBranchIsClosed] = useState(false);
   const dispatch = useDispatch();
@@ -221,7 +222,7 @@ const Home = () => {
   const handleCompleteOrder = async () => {
     try {
       console.log(orderToComplete);
-      const res = await CashierService.markOrderCompleted(orderToComplete);
+      const res = await CashierService.markOrderCompleted(orderToComplete,feedback);
       if (res.error) {
         console.log(res.error);
         return;
@@ -307,7 +308,9 @@ const Home = () => {
                 alt="product"
                 className="h-24 rounded-full mb-3 w-1/4 object-cover"
               />
-              <h3 className="text-primary text-xl font-bold w-full border-b-2 ">{product.name}</h3>
+              <h3 className="text-primary text-xl font-bold w-full border-b-2 ">
+                {product.name}
+              </h3>
               <p className="mt-2">PKR {product.price}/-</p>
               <button
                 className="btn bg-primary text-white p-2 rounded hover:bg-secondary w-full mt-2"
@@ -588,6 +591,15 @@ const Home = () => {
             <p className="my-4">
               Are you sure you want to mark this order as completed?
             </p>
+
+            <p className="text-gray-500 text-sm">
+              Enter client feedback below (optional)
+            </p>
+            <textarea
+              className="input input-bordered w-full"
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+            ></textarea>
             <div className="modal-action">
               <button
                 className="btn btn-success w-1/2"

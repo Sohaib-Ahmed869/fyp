@@ -32,11 +32,54 @@ const managerService = {
     }
   },
 
+  addIngredient: async (ingredient) => {
+    try {
+      console.log(ingredient);
+      const response = await axios.post(
+        `${BASE_URL}/manager/ingredient/add`,
+        ingredient,
+        {
+          withCredentials: true,
+        }
+      );
+      return handleResponse(response);
+    } catch (error) {
+      return { error: error.message };
+    }
+  },
+
+  getIngredients: async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/manager/ingredients`, {
+        withCredentials: true,
+      });
+      return handleResponse(response);
+    } catch (error) {
+      return { error: error.message };
+    }
+  },
+
   getProducts: async () => {
     try {
       const response = await axios.get(`${BASE_URL}/manager/products`, {
         withCredentials: true,
       });
+      return handleResponse(response);
+    } catch (error) {
+      return { error: error.message };
+    }
+  },
+
+  inactivateProduct: async (productId) => {
+    try {
+      console.log(productId);
+      const response = await axios.put(
+        `${BASE_URL}/manager/product/inactiveProduct/${productId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
       return handleResponse(response);
     } catch (error) {
       return { error: error.message };

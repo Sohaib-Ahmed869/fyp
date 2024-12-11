@@ -13,11 +13,14 @@ const ManagerAdd = () => {
   const [phone, setPhone] = useState("");
   const [selectedBranch, setSelectedBranch] = useState("");
 
-  useEffect(() => {
-    AdminService.getBranches().then((res) => {
+  const getBranches = async () => {
+    await AdminService.getBranches().then((res) => {
       console.log(res.data);
       setBranches(res.data);
     });
+  };
+  useEffect(() => {
+    getBranches();
   }, []);
 
   const clearForm = () => {
@@ -31,7 +34,7 @@ const ManagerAdd = () => {
     setSelectedBranch("");
   };
 
-  const handleManagerAdd = (e) => {
+  const handleManagerAdd = async(e) => {
     try {
       e.preventDefault();
 
@@ -50,7 +53,7 @@ const ManagerAdd = () => {
         contact: phone,
       };
 
-      AdminService.addManager(manager).then((res) => {
+      await AdminService.addManager(manager).then((res) => {
         console.log(res.data);
         if (res.data === "error") {
           alert("Error adding manager");

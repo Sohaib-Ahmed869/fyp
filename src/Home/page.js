@@ -69,7 +69,7 @@ const Home = () => {
         <div className="flex flex-row">
           <button
             className="bg-transparent text-gray-900 py-2 px-4 rounded-0 border border-gray-900 font-semibold hover:bg-gray-900 hover:text-white"
-            onClick={() => (window.location.href = "/login")}
+            onClick={() => (window.location.href = "/allinone")}
           >
             Login
           </button>

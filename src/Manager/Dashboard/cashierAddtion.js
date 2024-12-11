@@ -6,9 +6,9 @@ const CashierManagement = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    managerService.addCashier(username, password).then((res) => {
+    await managerService.addCashier(username, password).then((res) => {
       console.log(res);
       if (res === "error") {
         alert("Error adding cashier");

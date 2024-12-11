@@ -145,6 +145,20 @@ const AdminService = {
       return { error: error.message };
     }
   },
+
+  getFeedbackAnalysis: async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/admin/feedbackAnalysis`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      return handleResponse(response);
+    } catch (error) {
+      return { error: error.message };
+    }
+  },
 };
 
 export default AdminService;

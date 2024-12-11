@@ -8,8 +8,9 @@ const AddProduct = () => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
-
   const [categories, setCategories] = useState([]);
+  const [ingredients, setIngredients] = useState(null);
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
 
   const clearForm = () => {
     setName("");
@@ -17,13 +18,28 @@ const AddProduct = () => {
     setDescription("");
     setCategory("");
     setPrice("");
+    setSelectedIngredients([]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(name, image, description, category, price);
-    if (!name || !image || !description || !price) {
-      alert("Please fill all the fields");
+    console.log(name, image, description, category, price, selectedIngredients);
+
+    // Check if all selected ingredients have quantities
+    const hasInvalidQuantity = selectedIngredients.some(
+      (item) => !item.quantity || item.quantity <= 0
+    );
+    if (
+      !name ||
+      !image ||
+      !description ||
+      !price ||
+      selectedIngredients.length === 0 ||
+      hasInvalidQuantity
+    ) {
+      alert(
+        "Please fill all the fields, select at least one ingredient, and specify quantities"
+      );
       return;
     }
 
@@ -35,15 +51,25 @@ const AddProduct = () => {
     formData.append("category", category);
     formData.append("price", price);
 
+    // Format ingredients data as expected by the schema
+    const ingredientsData = selectedIngredients.map((item) => ({
+      ingredient: item.ingredient,
+      quantity: item.quantity,
+    }));
+
+    formData.append("ingredients", JSON.stringify(ingredientsData));
+
     for (let pair of formData.entries()) {
       console.log(pair[0] + ": " + pair[1]);
     }
 
-    ManagerService.addProduct(formData).then((data) => {
+    await ManagerService.addProduct(formData).then((data) => {
       if (data.error) {
         console.log(data.error);
+        alert(data.error.message);
         return;
       } else {
+        alert("Product added successfully");
         console.log(data.data);
       }
 
@@ -51,15 +77,46 @@ const AddProduct = () => {
     });
   };
 
-  useEffect(() => {
-    ManagerService.getCategories().then((data) => {
+  const handleIngredientToggle = (ingredient) => {
+    setSelectedIngredients((prev) => {
+      const exists = prev.find((item) => item.ingredient === ingredient._id);
+      if (exists) {
+        return prev.filter((item) => item.ingredient !== ingredient._id);
+      } else {
+        return [
+          ...prev,
+          {
+            ingredient: ingredient._id,
+            quantity: 1,
+            name: ingredient.ingredient_name, // for display purposes
+          },
+        ];
+      }
+    });
+  };
+
+  const handleQuantityChange = (ingredientId, quantity) => {
+    setSelectedIngredients((prev) =>
+      prev.map((item) =>
+        item.ingredient === ingredientId
+          ? { ...item, quantity: Number(quantity) }
+          : item
+      )
+    );
+  };
+
+  const getIngredients = async () => {
+    await ManagerService.getIngredients().then((data) => {
       if (data.error) {
         console.log(data.error);
       } else {
-        console.log(data.data);
-        setCategories(data.data);
+        setIngredients(data.data.ingredients);
       }
     });
+  };
+
+  useEffect(() => {
+    getIngredients();
   }, []);
 
   return (
@@ -77,9 +134,10 @@ const AddProduct = () => {
           placeholder=" "
           required
           onChange={(e) => setName(e.target.value)}
+          value={name}
         />
         <label
-          for="floating_name"
+          htmlFor="floating_name"
           className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
         >
           Product Name
@@ -96,7 +154,7 @@ const AddProduct = () => {
           onChange={(e) => setImage(e.target.files[0])}
         />
         <label
-          for="floating_image"
+          htmlFor="floating_image"
           className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
         >
           Product Image
@@ -111,9 +169,10 @@ const AddProduct = () => {
           placeholder=" "
           required
           onChange={(e) => setDescription(e.target.value)}
+          value={description}
         />
         <label
-          for="floating_description"
+          htmlFor="floating_description"
           className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
         >
           Product Description
@@ -126,16 +185,17 @@ const AddProduct = () => {
           className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
           required
           onChange={(e) => setCategory(e.target.value)}
+          value={category}
         >
           <option value="">Select Category</option>
           {categories.map((category) => (
-            <option id={category._id} value={category.category_name}>
+            <option key={category._id} value={category.category_name}>
               {category.category_name}
             </option>
           ))}
         </select>
         <label
-          for="floating_category"
+          htmlFor="floating_category"
           className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
         >
           Category
@@ -150,14 +210,73 @@ const AddProduct = () => {
           placeholder=" "
           required
           onChange={(e) => setPrice(e.target.value)}
+          value={price}
         />
         <label
-          for="floating_price"
+          htmlFor="floating_price"
           className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
         >
           Price
         </label>
       </div>
+
+      {/* Updated Ingredients Selection with Quantities */}
+      <div className="mb-5">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Select Ingredients and Quantities
+        </label>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {ingredients &&
+            ingredients.map((ingredient) => (
+              <div
+                key={ingredient._id}
+                className="flex flex-col space-y-2 p-4 border rounded-lg"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id={ingredient._id}
+                      checked={selectedIngredients.some(
+                        (item) => item.ingredient === ingredient._id
+                      )}
+                      onChange={() => handleIngredientToggle(ingredient)}
+                      className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label
+                      htmlFor={ingredient._id}
+                      className="ml-2 block text-sm text-gray-900"
+                    >
+                      {ingredient.ingredient_name}
+                    </label>
+                  </div>
+                </div>
+                {selectedIngredients.some(
+                  (item) => item.ingredient === ingredient._id
+                ) && (
+                  <div className="flex items-center space-x-2 ml-6">
+                    <input
+                      type="number"
+                      min="1"
+                      value={
+                        selectedIngredients.find(
+                          (item) => item.ingredient === ingredient._id
+                        )?.quantity || 1
+                      }
+                      onChange={(e) =>
+                        handleQuantityChange(ingredient._id, e.target.value)
+                      }
+                      className="block w-20 px-2 py-1 text-sm border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Qty"
+                    />
+                    <span className="text-sm text-gray-500">units</span>
+                  </div>
+                )}
+              </div>
+            ))}
+        </div>
+      </div>
+
       <button
         type="submit"
         className="w-full py-3 mt-10 bg-blue-500 rounded-md text-white text-sm hover:bg-blue-600"
