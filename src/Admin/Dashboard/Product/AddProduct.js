@@ -115,8 +115,19 @@ const AddProduct = () => {
     });
   };
 
+  const getCategories = async () => {
+    await AdminService.getCategories().then((data) => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        setCategories(data.data.categories);
+      }
+    });
+  };
+
   useEffect(() => {
     getIngredients();
+    getCategories();
   }, []);
 
   return (
@@ -182,14 +193,14 @@ const AddProduct = () => {
         <select
           name="floating_category"
           id="floating_category"
-          className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+          className="block py-2.5  p-2 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
           required
           onChange={(e) => setCategory(e.target.value)}
           value={category}
         >
           <option value="">Select Category</option>
           {categories.map((category) => (
-            <option key={category._id} value={category.category_name}>
+            <option key={category._id} value={category.category_name} className="p-2">
               {category.category_name}
             </option>
           ))}

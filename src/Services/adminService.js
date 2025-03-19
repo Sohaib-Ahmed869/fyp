@@ -159,6 +159,34 @@ const AdminService = {
       return { error: error.message };
     }
   },
+
+  addCategory: async (category) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/category`, category, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      return handleResponse(response);
+    } catch (error) {
+      return "error";
+    }
+  },
+
+  getCategories: async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/category`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      return handleResponse(response);
+    } catch (error) {
+      return { error: error.message };
+    }
+  },
 };
 
 export default AdminService;

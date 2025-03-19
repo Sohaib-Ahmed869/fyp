@@ -182,7 +182,7 @@ const Line = ({}) => {
             Total Sales
           </p>
         </div>
-        <div className="flex items-center px-2.5 py-0.5 text-base font-semibold text-center">
+        {/* <div className="flex items-center px-2.5 py-0.5 text-base font-semibold text-center">
           {percentageChangeFromLastDay > 0 ? (
             <div className="flex items-center text-green-500 dark:text-green-500">
               {percentageChangeFromLastDay} %{" "}
@@ -194,7 +194,7 @@ const Line = ({}) => {
               <BsArrowDown className="text-red-500 dark:text-red-500" />
             </div>
           )}
-        </div>
+        </div> */}
       </div>
       <div id="area-chart" className="h-96"></div>
     </div>

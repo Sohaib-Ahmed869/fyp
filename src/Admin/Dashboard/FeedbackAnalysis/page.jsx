@@ -149,12 +149,12 @@ const FeedbackAnalysis = () => {
         <Card>
           <h2 className="text-lg font-bold mb-4">Common Issues</h2>
           <div className="space-y-4">
-            {analysis?.analysis?.common_issues?.common_complaints?.map(
-              (complaint, index) => (
+            {analysis?.analysis?.common_issues?.example_issues?.map(
+              (issue, index) => (
                 <div key={index} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">{complaint}</span>
+                  <span className="text-sm text-gray-600">{issue}</span>
                   <span className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded-full">
-                    Common Issue
+                    Issue
                   </span>
                 </div>
               )
@@ -164,21 +164,23 @@ const FeedbackAnalysis = () => {
       </div>
 
       <Card>
-  <h2 className="text-lg font-bold mb-4">Keywords Analysis</h2>
-  <div className="space-y-4">
-    {Object.entries(analysis?.analysis?.keyword_analysis?.top_keywords || {})
-      .sort((a, b) => b[1] - a[1]) // Sort by count in descending order
-      .slice(0, 5) // Take only the top 5
-      .map(([keyword, count], index) => (
-        <div key={index} className="flex items-center justify-between">
-          <span className="text-sm text-gray-600">{keyword}</span>
-          <span className="px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-full">
-            {count}
-          </span>
+        <h2 className="text-lg font-bold mb-4">Keywords Analysis</h2>
+        <div className="space-y-4">
+          {Object.entries(
+            analysis?.analysis?.keyword_analysis?.top_keywords || {}
+          )
+            .sort((a, b) => b[1] - a[1]) // Sort by count in descending order
+            .slice(0, 5) // Take only the top 5
+            .map(([keyword, count], index) => (
+              <div key={index} className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">{keyword}</span>
+                <span className="px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-full">
+                  {count}
+                </span>
+              </div>
+            ))}
         </div>
-      ))}
-  </div>
-</Card>
+      </Card>
       <Card>
         <h2 className="text-lg font-bold mb-4 mt-4">Recent Feedbacks</h2>
         <div className="space-y-4">

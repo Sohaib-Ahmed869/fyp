@@ -59,8 +59,12 @@ const Home = () => {
       console.log(response.error);
     } else {
       console.log(response.data);
-      setProducts(response.data);
-      setFilteredProducts(response.data);
+      setProducts(response.data.filter((product) => product.status === true));
+      //filter products where status is active
+
+      setFilteredProducts(
+        response.data.filter((product) => product.status === true)
+      );
     }
   };
 
@@ -222,7 +226,10 @@ const Home = () => {
   const handleCompleteOrder = async () => {
     try {
       console.log(orderToComplete);
-      const res = await CashierService.markOrderCompleted(orderToComplete,feedback);
+      const res = await CashierService.markOrderCompleted(
+        orderToComplete,
+        feedback
+      );
       if (res.error) {
         console.log(res.error);
         return;
