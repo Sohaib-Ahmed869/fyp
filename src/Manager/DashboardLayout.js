@@ -15,18 +15,34 @@ import BranchManagement from "./BranchManagement/page";
 import AuthService from "../Services/authService";
 import useStore from "../Store/store";
 
+import MessagingComponent from "../Messaging/messagingComponent";
+import { initializeSocket, disconnectSocket } from "../Services/socketService";
+
 const ManagerDashboardLayout = () => {
   const [show, handleShow] = useState(false);
   const [showUser, handleShowUser] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   const { userRole, setUserRole } = useStore();
+  const { userId, shopId, branchId } = useStore();
 
   useEffect(() => {
-    console.log(userRole);
     if (userRole === "null" || userRole === null || userRole !== "manager") {
       window.location.href = "/allinone";
+    } else {
+      // Initialize socket when manager is logged in
+      initializeSocket({
+        userId,
+        role: userRole,
+        shopId,
+        branchId, // Managers need branchId for branch-specific messages
+      });
     }
-  }, [userRole]);
+
+    // Cleanup socket connection when component unmounts
+    return () => {
+      disconnectSocket();
+    };
+  }, [userRole, userId, shopId, branchId]);
 
   const handleLogout = async () => {
     try {
@@ -34,6 +50,7 @@ const ManagerDashboardLayout = () => {
       console.log(response);
       if (response.data.message) {
         setUserRole(null);
+        disconnectSocket(); // Disconnect socket on logout
       }
     } catch (error) {
       console.log(error);
@@ -406,6 +423,7 @@ const ManagerDashboardLayout = () => {
           </ul>
         </div>
       </div>
+      <MessagingComponent />
     </div>
   );
 };

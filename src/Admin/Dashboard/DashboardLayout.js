@@ -17,6 +17,12 @@ import AuthService from "../../Services/authService";
 import useStore from "../../Store/store";
 import CategoryPage from "./Categories/page";
 
+import MessagingComponent from "../../Messaging/messagingComponent";
+import {
+  initializeSocket,
+  disconnectSocket,
+} from "../../Services/socketService";
+
 import { Modal } from "react-bootstrap";
 
 const DashboardLayout = () => {
@@ -25,12 +31,25 @@ const DashboardLayout = () => {
   const [selected, setSelected] = useState("Dashboard");
   const { userRole, setUserRole } = useStore();
 
+  const { userId, shopId } = useStore();
+
   useEffect(() => {
-    console.log(userRole);
     if (!userRole || userRole === "null" || userRole !== "admin") {
       window.location.href = "/allinone";
+    } else {
+      // Initialize socket when admin is logged in
+      initializeSocket({
+        userId,
+        role: userRole,
+        shopId,
+      });
     }
-  }, [userRole]);
+
+    // Cleanup socket connection when component unmounts
+    return () => {
+      disconnectSocket();
+    };
+  }, [userRole, userId, shopId]);
 
   const handleLogout = async () => {
     try {
@@ -38,6 +57,7 @@ const DashboardLayout = () => {
       console.log(response);
       if (response.data.message) {
         setUserRole(null);
+        disconnectSocket(); // Disconnect socket on logout
       }
     } catch (error) {
       console.log(error);
@@ -431,6 +451,7 @@ const DashboardLayout = () => {
           </ul>
         </div>
       </div>
+      <MessagingComponent />
     </div>
   );
 };

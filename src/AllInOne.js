@@ -8,6 +8,7 @@ import useStore from "./Store/store";
 import LogoWhite1 from "./Assets/LogoWhite1.png";
 import loginimage from "./Assets/loginimage.png";
 
+
 const advantages = [
   {
     color: "#14914A",
@@ -40,7 +41,14 @@ const AllInOneLogin = () => {
   const [branches, setBranches] = useState([]);
   const [shopName, setShopName] = useState("");
   const [branch, setBranch] = useState("");
-  const { setUserRole } = useStore();
+  const {
+    setUserRole,
+    setUserId,
+    setShopId,
+    setUserShopName,
+    setBranchId,
+    setBranchName,
+  } = useStore();
 
   useEffect(() => {
     if (role === "Cashier" || role === "Manager") {
@@ -56,39 +64,56 @@ const AllInOneLogin = () => {
     }
   }, [shopName]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (role === "Admin") {
-      AuthService.adminLogin(name, password).then((res) => {
+      await AuthService.adminLogin(name, password).then((res) => {
         if (res === "error") {
           alert("Wrong Credentials");
         } else {
           alert("Login Successful");
           setUserRole(res.data.role);
+          setUserId(res.data.userId); // Add this
+          setShopId(res.data.shopId); // Add this
+          setShopName(name); // Set shop name
           window.location.href = "/admin/dashboard";
         }
       });
     } else if (role === "Cashier") {
-      AuthService.cashierLogin(name, password, shopName, branch).then((res) => {
-        if (res === "error") {
-          alert("Wrong Credentials");
-        } else {
-          alert("Login Successful");
-          setUserRole(res.data.role);
-          window.location.href = "/cashier/dashboard";
+      await AuthService.cashierLogin(name, password, shopName, branch).then(
+        (res) => {
+          if (res === "error") {
+            alert("Wrong Credentials");
+          } else {
+            alert("Login Successful");
+            setUserRole(res.data.role);
+            setUserId(res.data.userId); // Add this
+            setShopId(res.data.shopId); // Add this
+            setShopName(shopName); // Add this
+            setBranchId(res.data.branchId); // Add this
+            setBranchName(branch); // Add this
+            window.location.href = "/cashier/dashboard";
+          }
         }
-      });
+      );
     } else if (role === "Manager") {
-      AuthService.managerLogin(name, password, shopName, branch).then((res) => {
-        if (res === "error") {
-          alert("Wrong Credentials");
-        } else {
-          alert("Login Successful");
-          setUserRole(res.data.role);
-          window.location.href = "/manager/dashboard";
+      await AuthService.managerLogin(name, password, shopName, branch).then(
+        (res) => {
+          if (res === "error") {
+            alert("Wrong Credentials");
+          } else {
+            alert("Login Successful");
+            setUserRole(res.data.role);
+            setUserId(res.data.userId); // Add this
+            setShopId(res.data.shopId); // Add this
+            setShopName(shopName); // Add this
+            setBranchId(res.data.branchId); // Add this
+            setBranchName(branch); // Add this
+            window.location.href = "/manager/dashboard";
+          }
         }
-      });
+      );
     }
   };
 
