@@ -159,6 +159,41 @@ const AdminService = {
       return { error: error.message };
     }
   },
+  getSuggestionsByFeedback: async (feedback) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/admin/suggestions`,
+        { feedback },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      return handleResponse(response);
+    } catch (error) {
+      return { error: error.message };
+    }
+  },
+
+  getQuickSentimentAnalysis: async (text) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/admin/quickSentimentAnalysis`,
+        { text },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      return handleResponse(response);
+    } catch (error) {
+      return { error: error.message };
+    }
+  },
 
   addCategory: async (category) => {
     try {

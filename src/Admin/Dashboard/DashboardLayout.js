@@ -12,7 +12,7 @@ import BranchPage from "./BranchManagement/ViewBranches";
 import ProductPage from "./Product/page";
 import IngredientsManagement from "./Ingredients/ViewIngredient";
 import FeedbackAnalysis from "./FeedbackAnalysis/page";
-
+import PredictiveAnalyticsDashboard from "./PredictiveDashboard/dashboard";
 import AuthService from "../../Services/authService";
 import useStore from "../../Store/store";
 import CategoryPage from "./Categories/page";
@@ -168,6 +168,7 @@ const DashboardLayout = () => {
           {selected === "Branch Management" ? <BranchPage /> : null}
           {selected === "Products" ? <ProductPage /> : null}
           {selected === "Ingredients" ? <IngredientsManagement /> : null}
+          {selected === "Predictive Analysis" ? <PredictiveAnalyticsDashboard /> : null}
           {selected === "Feedback Analysis" ? <FeedbackAnalysis /> : null}
           {selected === "Categories" ? <CategoryPage /> : null}
           {
@@ -375,7 +376,8 @@ const DashboardLayout = () => {
               <a
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
+                onClick={() => setSelected("Predictive Analysis")}
+             >
                 <svg
                   className="flex-shrink-0 w-5 h-5 text-white transition duration-75 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white"
                   aria-hidden="true"
@@ -387,9 +389,6 @@ const DashboardLayout = () => {
                 </svg>
                 <span className="flex-1 ms-3 whitespace-nowrap">
                   Predictive Analysis
-                </span>
-                <span className="inline-flex items-center justify-center w-30 h-3 p-3 ms-3 text-sm font-medium text-white bg-blue-100 rounded-full dark:bg-blue-900 dark:text-yellow-300">
-                  Coming soon
                 </span>
               </a>
             </li>
